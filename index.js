@@ -6,9 +6,27 @@ const app = exrpess();
 app.engine('handlebars',exrpesshbs());
 app.set('view engine', 'handlebars');
 
+const items = [{
+    "name": "Item 1",
+    "description" : "test descrition 1",
+    "amouont" : "20.00"
+}, {
+    "name": "Item 2",
+    "description" : "test descrition 2",
+    "amouont" : "30.00"
+}, {
+    "name": "Item 3",
+    "description" : "test descrition 3",
+    "amouont" : "40.00"
+}];
+
+const isAdmin = false;
+
 app.get("/index", function(req, res) {
     res.render("hello", {
         userName: "Shashi",
+        items: items,
+        admin: isAdmin,
         layout: 'main'
     });
 });

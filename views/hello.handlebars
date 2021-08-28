@@ -1,3 +1,33 @@
 <div>
     Hello World {{userName}}
 </div>
+
+<div>
+    <table>
+        <th>
+            <td>Name</td>
+            <td>Description</td>
+            <td>Amount</td>
+        </th>
+        {{#each items}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.amount}}</td>
+        </tr>  
+        {{/each}}      
+    </table>
+</div>
+
+{{#if admin}}
+<div>
+    This is Admin Section
+</div>
+{{else}}
+<div>
+    This is User Section
+</div>
+{{/if}}
+
+
+</div>
