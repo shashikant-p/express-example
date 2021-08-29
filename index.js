@@ -10,7 +10,8 @@ const userSchema = mongoose.Schema({
     email: String,
     firstName : String,
     lastName: String,
-    password: String
+    password: String,
+    isAdmin: Boolean
 });
 
 // Register the collection with Mongoose
@@ -36,14 +37,11 @@ const items = [{
     "amouont" : "40.00"
 }];
 
-const isAdmin = false;
-
 // This is the home screen
 app.get("/index", function(req, res) {
     res.render("hello", {
         userName: "Shashi",
         items: items,
-        admin: isAdmin,
         layout: 'main'
     });
 });
@@ -68,11 +66,13 @@ app.get("/registerSubmit", async function(req, res) {
         email: req.query.email,
         firstName: req.query.firstName,
         lastName: req.query.lastName,
-        password: req.query.password,        
+        password: req.query.password,
+        isAdmin: false        
     });
 
     // Insert new user document in mongo db
-    await newUser.save();
+    const user = await newUser.save();
+    console.log(user);
 
     // Send the user back to login page
     res.render("login", {layout: 'basic'});
@@ -94,10 +94,18 @@ app.get("/loginSubmit", async function(req, res) {
     if (user) {
         // If the password is matching continue
         if (user.password === req.query.password) {
-            res.render("hello", {
-                layout: 'basic',
-                userName: user.firstName
-            });
+            if (user.isAdmin) {
+                res.render("adminhome", {
+                    layout: 'main',
+                    userName: user.firstName
+                });
+            } else {
+                res.render("userhome", {
+                    layout: 'main',
+                    userName: user.firstName
+                });
+            }
+
         } else {
             // If password is not matching, take to login page
             res.render("login", {
@@ -114,6 +122,16 @@ app.get("/loginSubmit", async function(req, res) {
     }
 
  
+});
+
+app.get("/listUsers", async function(req, res) {
+    const userList =  await User.find();
+    console.log(userList);
+    
+    res.render("users", {
+        layout: 'main',
+        userList: userList
+    });    
 });
 
 // Start the server and listen for requests

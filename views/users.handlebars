@@ -1,0 +1,18 @@
+<div class="container" style="margin-top: 80px;">
+    <div>
+        <table>
+            <th>
+            <td>Email</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            </th>
+            {{#each userList}}
+            <tr>
+                <td>{{this.email}}</td>
+                <td>{{this.firstName}}</td>
+                <td>{{this.lastName}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
