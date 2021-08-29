@@ -1,9 +1,20 @@
-<div>
+<div class="container" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-4">
+            <form action="/loginSubmit" method="GET">
+                <div class="form-group">
+                    <label for="email" class="col-form-label">Email</label>
+                    <input id="email" class="form-control" type="text" name="username" placeholder="Email" />
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-form-label">Password</label>
+                    <input id="password" class="form-control" type="password" name="password" placeholder="Password" />
+                </div>
+                <input class="btn btn-primary" type="submit" />
+            </form>
+        </div>
+    </div>
 
-    <form action="/loginSubmit" method="GET">
-        <input type="text" name="username" placeholder="Email"/>
-        <input type="password" name="password"  placeholder="Password"/>
-        <input type="submit" />
-    </form>
-    <b>{{message}}</b>
+</div>
+<b>{{message}}</b>
 </div>

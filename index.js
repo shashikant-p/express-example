@@ -51,13 +51,15 @@ app.get("/index", function(req, res) {
 // This is called to show login form
 app.get("/login", function(req, res) {
     res.render("login", {
-        layout: 'main'
+        layout: 'basic'
     });
 });
 
 // This is called to show registration page
 app.get("/register", function(req, res) {
-    res.render("register", {layout: 'basic'});
+    res.render("register", {
+        layout: 'basic'
+    });
 });
 
 // This is called when registration form is submitted
