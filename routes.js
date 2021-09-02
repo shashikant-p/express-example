@@ -73,12 +73,16 @@ router.get("/loginSubmit", async function (req, res) {
                     userName: user.firstName
                 });
             } else {
+
+                let productList = await dbModels.Product.find().lean().exec();
+
+
                 res.render("userhome", {
                     layout: 'main',
-                    userName: user.firstName
+                    userName: user.firstName,
+                    productList: productList
                 });
             }
-
         } else {
             // If password is not matching, take to login page
             res.render("login", {
@@ -100,8 +104,54 @@ router.get("/listUsers", async function (req, res) {
     userList = await dbModels.User.find().lean().exec();
     res.render("users", {
         layout: 'main',
-        userList: userList
+        userList: userList,
+        users: true
     });
 });
+
+router.get("/products", async function (req, res) {
+    let productList = await dbModels.Product.find().lean().exec();
+
+    res.render("products", {
+        layout: 'main',
+        products: true,
+        productList: productList
+    });
+});
+
+router.get("/orders", async function (req, res) {
+    res.render("orders", {
+        layout: 'main',
+        orders: true
+    });
+});
+
+router.get("/addProduct", async function (req, res) {
+    res.render("addProduct", {
+        layout: 'main',
+        products: true
+    });
+});
+
+router.get("/saveProduct", async function (req, res) {
+
+    const newProduct = new dbModels.Product({
+        title: req.query.title,
+        description: req.query.description,
+        charges: req.query.charges
+    });
+
+    // Insert new user document in mongo db
+    const product = await newProduct.save();
+
+    let productList = await dbModels.Product.find().lean().exec();
+
+    res.render("products", {
+        layout: 'main',
+        products: true,
+        productList: productList
+    });
+});
+
 
 module.exports = router;

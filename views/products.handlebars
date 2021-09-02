@@ -1,18 +1,20 @@
 <div class="container" style="margin-top: 80px;">
+    {{> options}}
+
+    <a href="/addProduct" type="button" class="btn btn-secondary">Add Product</a>
+
     <div>
         <table class="table table-striped mt-4">
             <tr class="thead-dark">
                 <th>Title</th>
                 <th>Description</th>
                 <th>Charges</th>
-                <th>Add to Cart</th>
             </tr>
             {{#each productList}}
             <tr>
                 <td>{{this.title}}</td>
                 <td>{{this.description}}</td>
                 <td>{{this.charges}}</td>
-                 <td><a href="/addToCart">Add</a></td>
             </tr>
             {{/each}}
         </table>

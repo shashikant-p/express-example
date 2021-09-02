@@ -12,9 +12,18 @@ const userSchema = mongoose.Schema({
     isAdmin: Boolean
 });
 
+const productSchema = mongoose.Schema({
+    title: String,
+    description: String,
+    charges: String
+});
+
+
 // Register the collection with Mongoose
 const User = mongoose.model("user", userSchema);
+const Product = mongoose.model("product", productSchema);
 
 module.exports = {
-    User
+    User,
+    Product
 }
