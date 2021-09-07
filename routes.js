@@ -20,10 +20,49 @@ router.get("/index", function (req, res) {
 });
 
 // This is called to show login form
-router.get("/login", function (req, res) {
-    res.render("login", {
-        layout: 'main'
-    });
+router.get("/login", async function (req, res) {
+    console.log(req.session);
+
+    if (req.session && req.session.loggedIn) {
+
+        const user = await dbModels.User.findOne({
+            email: req.session.username
+        });
+    
+        if (user.isAdmin) {
+            res.render("adminhome", {
+                layout: 'main',
+                userName: user.firstName
+            });
+        } else {
+            let productList = await dbModels.Product.find().lean().exec();
+
+            res.render("userhome", {
+                layout: 'main',
+                userName: user.firstName,
+                productList: productList
+            });
+
+        }
+    } else {
+        res.render("login", {
+            layout: 'main'
+        });
+    }
+});
+
+// This is called to show login form
+router.get("/logout", async function (req, res) {
+    console.log(req.session);
+
+    if (req.session) {
+
+        await req.session.destroy();
+        
+        res.render("login", {
+            layout: 'main'
+        });
+    }
 });
 
 // This is called to show registration page
@@ -52,38 +91,46 @@ router.get("/registerSubmit", async function (req, res) {
 });
 
 // This is called when login form is submitted
-router.get("/loginSubmit", async function (req, res) {
-    console.log(req.query.username);
-    console.log(req.query.password);
+router.post("/loginSubmit", async function (req, res) {
+    console.log(req.body.username);
+    console.log(req.body.password);
 
     // Find documents in mongodb matching the condition
     const user = await dbModels.User.findOne({
-        email: req.query.username
+        email: req.body.username
     });
 
-    console.log(user);
+    // console.log(user);
 
     // If a document was found in the db continue
     if (user) {
         // If the password is matching continue
-        if (user.password === req.query.password) {
+        if (user.password === req.body.password) {
             if (user.isAdmin) {
                 res.render("adminhome", {
                     layout: 'main',
                     userName: user.firstName
                 });
+
+                req.session.loggedIn=true;
+                req.session.isAdmin=true;
+                req.session.username=req.body.username;
             } else {
-
                 let productList = await dbModels.Product.find().lean().exec();
-
 
                 res.render("userhome", {
                     layout: 'main',
                     userName: user.firstName,
                     productList: productList
                 });
+
+                req.session.loggedIn=true;
+                req.session.isAdmin=false;
+                req.session.username=req.body.username;
             }
-        } else {
+
+
+
             // If password is not matching, take to login page
             res.render("login", {
                 layout: 'basic',
