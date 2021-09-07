@@ -75,10 +75,10 @@ router.get("/register", function (req, res) {
 // This is called when registration form is submitted
 router.get("/registerSubmit", async function (req, res) {
     const newUser = new dbModels.User({
-        email: req.query.email,
-        firstName: req.query.firstName,
-        lastName: req.query.lastName,
-        password: req.query.password,
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        password: req.body.password,
         isAdmin: false
     });
 
