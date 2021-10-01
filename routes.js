@@ -59,7 +59,7 @@ router.get("/logout", async function (req, res) {
 
         await req.session.destroy();
         
-        res.render("login", {
+        res.render("landing", {
             layout: 'main'
         });
     }
@@ -73,7 +73,7 @@ router.get("/register", function (req, res) {
 });
 
 // This is called when registration form is submitted
-router.get("/registerSubmit", async function (req, res) {
+router.post("/registerSubmit", async function (req, res) {
     const newUser = new dbModels.User({
         email: req.body.email,
         firstName: req.body.firstName,
@@ -87,7 +87,7 @@ router.get("/registerSubmit", async function (req, res) {
     console.log(user);
 
     // Send the user back to login page
-    res.render("login", { layout: 'basic' });
+    res.render("login", { layout: 'main' });
 });
 
 // This is called when login form is submitted
