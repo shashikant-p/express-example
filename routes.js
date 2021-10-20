@@ -5,8 +5,15 @@ const router = express.Router();
 
 // This is the home screen
 router.get("/", function (req, res) {
+    let loggedOut = true;
+    if (req.session) {
+        if (req.session.loggedIn === false) {
+            loggedOut = true;
+        }
+    }
     res.render("landing", {
-        layout: 'main'
+        layout: 'main',
+        loggedOut
     });
 });
 
@@ -32,7 +39,8 @@ router.get("/login", async function (req, res) {
         if (user.isAdmin) {
             res.render("adminhome", {
                 layout: 'main',
-                userName: user.firstName
+                userName: user.firstName,
+                loggedOut: false
             });
         } else {
             let productList = await dbModels.Product.find().lean().exec();
@@ -40,13 +48,15 @@ router.get("/login", async function (req, res) {
             res.render("userhome", {
                 layout: 'main',
                 userName: user.firstName,
-                productList: productList
+                productList: productList,
+                loggedOut: false
             });
 
         }
     } else {
         res.render("login", {
-            layout: 'main'
+            layout: 'main',
+            loggedOut: true
         });
     }
 });
@@ -59,16 +69,25 @@ router.get("/logout", async function (req, res) {
 
         await req.session.destroy();
         
-        res.render("landing", {
-            layout: 'main'
-        });
+        // res.render("landing", {
+        //     layout: 'main'
+        // });
+
+        res.redirect('/');
     }
 });
 
 // This is called to show registration page
 router.get("/register", function (req, res) {
+    let loggedOut = true;
+    if (req.session) {
+        if (req.session.loggedIn === false) {
+            loggedOut = true;
+        }
+    }    
     res.render("register", {
-        layout: 'main'
+        layout: 'main',
+        loggedOut
     });
 });
 
@@ -109,7 +128,8 @@ router.post("/loginSubmit", async function (req, res) {
             if (user.isAdmin) {
                 res.render("adminhome", {
                     layout: 'main',
-                    userName: user.firstName
+                    userName: user.firstName,
+                    loggedOut: false
                 });
 
                 req.session.loggedIn=true;
@@ -121,7 +141,8 @@ router.post("/loginSubmit", async function (req, res) {
                 res.render("userhome", {
                     layout: 'main',
                     userName: user.firstName,
-                    productList: productList
+                    productList: productList,
+                    loggedOut: false
                 });
 
                 req.session.loggedIn=true;
@@ -133,15 +154,17 @@ router.post("/loginSubmit", async function (req, res) {
 
             // If password is not matching, take to login page
             res.render("login", {
-                layout: 'basic',
-                message: "Please enter valid login details"
+                layout: 'main',
+                message: "Please enter valid login details",
+                loggedOut: true
             });
         }
     } else {
         // If no user found for the given email id, take back to login page
         res.render("login", {
             layout: 'basic',
-            message: "Please enter valid login details"
+            message: "Please enter valid login details",
+            loggedOut: true
         });
     }
 });
@@ -149,19 +172,34 @@ router.post("/loginSubmit", async function (req, res) {
 router.get("/listUsers", async function (req, res) {
     let userList;
     userList = await dbModels.User.find().lean().exec();
+
+    let loggedOut = true;
+    if (req.session) {
+        if (req.session.loggedIn === false) {
+            loggedOut = true;
+        }
+    }    
     res.render("users", {
         layout: 'main',
         userList: userList,
-        users: true
+        users: true,
+        loggedOut
     });
 });
 
 router.get("/products", async function (req, res) {
     let productList = await dbModels.Product.find().lean().exec();
 
+    let loggedOut = true;
+    if (req.session.loggedOut) {
+        if (req.session.loggedIn === false) {
+            loggedOut = true;
+        }
+    }
     res.render("products", {
         layout: 'main',
         products: true,
+        loggedOut,
         productList: productList
     });
 });

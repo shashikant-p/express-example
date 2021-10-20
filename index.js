@@ -7,8 +7,21 @@ const routes = require('./routes');
 
 const app = express();
 
+const hbs = exrpesshbs.create({
+    helpers : {
+        ifeq : function (a, b, options) {
+            if (a == b) { return options.fn(this); }
+            return options.inverse(this);
+        },
+        ifnoteq : function (a, b, options) {
+            if (a != b) { return options.fn(this); }
+            return options.inverse(this);
+        }
+    }
+})
+
 // Handlebars setup
-app.engine('handlebars',exrpesshbs());
+app.engine('handlebars',hbs.engine);
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({

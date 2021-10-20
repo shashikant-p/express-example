@@ -7,34 +7,46 @@
 
 <body>
     <div class="d-flex flex-column" style="min-height: 100vh;">
-    <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Camera Rentals</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="/">Camera Rentals</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>                
-            </ul>
-        </nav>
+                <ul class="nav justify-content-end">
+                    {{#if loggedOut}}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/login">Login</a>
+                    </li>
+                    {{/if}}
+                     {{#if loggedOut}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    {{/if}}
+                    {{#unless loggedOut}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart">Cart</a>
+                    </li>
+                    {{/unless}}
+                    {{#unless loggedOut}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {{/unless}}
+                </ul>
+            </nav>
+        </div>
+        <div>
+            {{{body}}}
+        </div>
+        <div class="mt-auto pt-4 pb-4 text-center" style="background-color: powderblue">
+            Copyright 2021. All rights reserved.
+        </div>
     </div>
-    <div>
-        {{{body}}}
-    </div>
-    <div class="mt-auto pt-4 pb-4 text-center" style="background-color: powderblue">
-        Copyright 2021. All rights reserved.
-    </div>
-</div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
