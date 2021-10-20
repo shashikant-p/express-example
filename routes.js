@@ -9,6 +9,8 @@ router.get("/", function (req, res) {
     if (req.session) {
         if (req.session.loggedIn === false) {
             loggedOut = true;
+        } else {
+            loggedOut = false;
         }
     }
     res.render("landing", {
@@ -106,7 +108,7 @@ router.post("/registerSubmit", async function (req, res) {
     console.log(user);
 
     // Send the user back to login page
-    res.render("login", { layout: 'main' });
+    res.render("login", { layout: 'main', loggedOut: true });
 });
 
 // This is called when login form is submitted
